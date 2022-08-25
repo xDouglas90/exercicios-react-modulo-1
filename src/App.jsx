@@ -1,5 +1,6 @@
 import { Footer, Header, Secao, FiltroSecao } from '@components';
 import { produtos } from '@services';
+import { ProductsProvider } from '@context';
 import { useState } from 'react';
 import styles from './App.module.css';
 
@@ -13,7 +14,9 @@ function App() {
   };
 
   const obterSubSecoes = (secao) => {
-    const produtosComSubSecoes = obterProdutosSecao(secao).filter((p) => p.subSecao);
+    const produtosComSubSecoes = obterProdutosSecao(secao).filter(
+      (p) => p.subSecao
+    );
 
     return Array.from(new Set(produtosComSubSecoes.map((p) => p.subSecao)));
   };
@@ -37,20 +40,22 @@ function App() {
     <div className={styles.app}>
       <Header />
       <main className={styles.main}>
-        <FiltroSecao
-          secoes={secoes}
-          secaoSelecionada={filtro}
-          onSelecionar={handleSelecionarSecao}
-        />
-
-        {obterSecoesFiltradas().map((secao) => (
-          <Secao
-            key={secao}
-            nome={secao}
-            produtos={obterProdutosSecao(secao)}
-            subSecoes={obterSubSecoes(secao)}
+        <ProductsProvider>
+          <FiltroSecao
+            secoes={secoes}
+            secaoSelecionada={filtro}
+            onSelecionar={handleSelecionarSecao}
           />
-        ))}
+
+          {obterSecoesFiltradas().map((secao) => (
+            <Secao
+              key={secao}
+              nome={secao}
+              produtos={obterProdutosSecao(secao)}
+              subSecoes={obterSubSecoes(secao)}
+            />
+          ))}
+        </ProductsProvider>
       </main>
       <Footer />
     </div>
