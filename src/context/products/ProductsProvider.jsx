@@ -9,7 +9,14 @@ export const ProductsProvider = ({ children }) => {
     selectedProducts.some((product) => product.id === id);
 
   const handleSelectProduct = (product) => {
-    setSelectedProducts((prev) => [...prev, product]);
+    if (isSelected(product.id)) {
+      setSelectedProducts(
+        selectedProducts.filter((item) => item.id !== product.id)
+      );
+      return;
+    }
+
+    setSelectedProducts([...selectedProducts, product]);
   };
 
   return (
